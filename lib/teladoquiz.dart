@@ -259,8 +259,8 @@ class Quiz extends StatelessWidget {
   final Function goBack;
   final String imageUrl;
   final int questionIndex;
-  final int timer; 
-  final Function goToHome; 
+  final int timer;
+  final Function goToHome;
 
   Quiz({
     required this.question,
@@ -270,14 +270,36 @@ class Quiz extends StatelessWidget {
     required this.imageUrl,
     required this.questionIndex,
     required this.timer,
-    required this.goToHome, 
+    required this.goToHome,
   });
 
   @override
   Widget build(BuildContext context) {
+    double progress = (questionIndex + 1) / 15;  
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Questão ${questionIndex + 1} de 15',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+
+        LinearProgressIndicator(
+          value: progress,
+          backgroundColor: Colors.grey[300],
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+        ),
+        SizedBox(height: 20),
+        
+
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -288,19 +310,25 @@ class Quiz extends StatelessWidget {
           ],
         ),
         SizedBox(height: 20),
+
+
         if (imageUrl.isNotEmpty)
           Image.asset(
             imageUrl,
             height: 220,
             fit: BoxFit.cover,
           ),
+        
         SizedBox(height: 20),
+
         Text(
           question,
           style: TextStyle(fontSize: 20),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 20),
+
+
         Wrap(
           alignment: WrapAlignment.center,
           spacing: 10,
@@ -310,7 +338,7 @@ class Quiz extends StatelessWidget {
                     onPressed: () => answerQuestion(answer['score'] as int),
                     child: Text(
                       answer['text'] as String,
-                      style: TextStyle(fontWeight: FontWeight.bold),  
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ))
               .toList(),
@@ -328,6 +356,7 @@ class Quiz extends StatelessWidget {
               textStyle: TextStyle(fontSize: 18),
             ),
           ),
+
         if (questionIndex == 0)
           ElevatedButton(
             onPressed: () => goToHome(),
