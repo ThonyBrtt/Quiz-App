@@ -81,6 +81,7 @@ flutter:
     - assets/davymaiado.gif
     - assets/davy-jones.gif
     - assets/controle.png
+    - assets/slk.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

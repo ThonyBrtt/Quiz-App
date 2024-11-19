@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'telaresultado.dart'; 
+import 'telaresultado.dart';
 
 class QuizPage extends StatefulWidget {
   @override
@@ -15,7 +15,7 @@ class _QuizPageState extends State<QuizPage> {
 
   late List<int?> _answeredScores;
 
-   final List<Map<String, Object>> _questions = [
+  final List<Map<String, Object>> _questions = [
     {
       'questionText': 'Qual é o nome do personagem principal de "The Legend of Zelda?"',
       'imageUrl': 'assets/link.gif',
@@ -178,7 +178,7 @@ class _QuizPageState extends State<QuizPage> {
     setState(() {
       if (_answeredScores[_questionIndex] == null) {
         _score += score;
-        _answeredScores[_questionIndex] = score; 
+        _answeredScores[_questionIndex] = score;
       }
       _questionIndex++;
       _timer = 10;
@@ -221,7 +221,9 @@ class _QuizPageState extends State<QuizPage> {
           _timer--;
         } else {
           timer.cancel();
-          _answerQuestion(0);
+          if (_questionIndex < _questions.length) {
+            _answerQuestion(0); 
+          }
         }
       });
     });
