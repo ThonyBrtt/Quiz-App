@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Result extends StatelessWidget {
   final int score;
   final VoidCallback resetQuiz;
-  final int totalQuestions = 15;  // Total de questões no quiz
+  final int totalQuestions = 15; 
 
   Result(this.score, this.resetQuiz);
 
@@ -40,7 +40,7 @@ class Result extends StatelessWidget {
             ),
           SizedBox(height: 20),
           Text(
-            'Acertos: $score/$totalQuestions',  // Exibe acertos e total de questões
+            'Acertos: $score/$totalQuestions',  
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 20),

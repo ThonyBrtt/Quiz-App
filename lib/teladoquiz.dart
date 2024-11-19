@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:async'; 
-import 'telaresultado.dart'; 
+import 'dart:async';
+import 'telaresultado.dart'; // Certifique-se de que este arquivo está correto.
 
 class QuizPage extends StatefulWidget {
   @override
@@ -10,10 +10,12 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   int _questionIndex = 0;
   int _score = 0;
-  int _timer = 10;  
+  int _timer = 10;
   Timer? _timerController;
 
-      final List<Map<String, Object>> _questions = [
+  late List<int?> _answeredScores;
+
+   final List<Map<String, Object>> _questions = [
     {
       'questionText': 'Qual é o nome do personagem principal de "The Legend of Zelda?"',
       'imageUrl': 'assets/link.gif',
@@ -168,40 +170,49 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     super.initState();
-    _startTimer(); 
+    _answeredScores = List<int?>.filled(_questions.length, null); // Inicializa a lista como null.
+    _startTimer();
   }
 
   void _answerQuestion(int score) {
     setState(() {
-      _score += score;
+      if (_answeredScores[_questionIndex] == null) {
+        _score += score;
+        _answeredScores[_questionIndex] = score; // Salva a pontuação da questão atual.
+      }
       _questionIndex++;
-      _timer = 10; 
+      _timer = 10;
     });
-    _startTimer(); 
+    _startTimer();
   }
 
   void _goBack() {
-    if (_questionIndex > 0) {
-      setState(() {
+    setState(() {
+      if (_questionIndex > 0) {
+        if (_answeredScores[_questionIndex - 1] != null) {
+          _score -= _answeredScores[_questionIndex - 1]!;
+          _answeredScores[_questionIndex - 1] = null;
+        }
         _questionIndex--;
-        _timer = 10; 
-      });
-      _startTimer(); 
-    }
+        _timer = 10;
+      }
+    });
+    _startTimer();
   }
 
   void _resetQuiz() {
     setState(() {
       _questionIndex = 0;
       _score = 0;
-      _timer = 10; 
+      _answeredScores = List<int?>.filled(_questions.length, null);
+      _timer = 10;
     });
-    _startTimer(); 
+    _startTimer();
   }
 
   void _startTimer() {
     if (_timerController != null) {
-      _timerController!.cancel(); 
+      _timerController!.cancel();
     }
 
     _timerController = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -210,19 +221,19 @@ class _QuizPageState extends State<QuizPage> {
           _timer--;
         } else {
           timer.cancel();
-          _answerQuestion(0); 
+          _answerQuestion(0);
         }
       });
     });
   }
 
   void _goToHome() {
-    Navigator.pop(context);  
+    Navigator.pop(context);
   }
 
   @override
   void dispose() {
-    _timerController?.cancel(); 
+    _timerController?.cancel();
     super.dispose();
   }
 
@@ -240,11 +251,11 @@ class _QuizPageState extends State<QuizPage> {
                 question: _questions[_questionIndex]['questionText'] as String,
                 answers: _questions[_questionIndex]['answers'] as List<Map<String, Object>>?,
                 answerQuestion: _answerQuestion,
-                goBack: _goBack, 
+                goBack: _goBack,
                 imageUrl: _questions[_questionIndex]['imageUrl'] as String,
-                questionIndex: _questionIndex, 
-                timer: _timer, 
-                goToHome: _goToHome,  
+                questionIndex: _questionIndex,
+                timer: _timer,
+                goToHome: _goToHome,
               )
             : Result(_score, _resetQuiz),
       ),
@@ -275,12 +286,11 @@ class Quiz extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double progress = (questionIndex + 1) / 15;  
+    double progress = (questionIndex + 1) / 15;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -291,15 +301,12 @@ class Quiz extends StatelessWidget {
           ],
         ),
         SizedBox(height: 10),
-
         LinearProgressIndicator(
           value: progress,
           backgroundColor: Colors.grey[300],
           valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
         ),
         SizedBox(height: 20),
-        
-
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -310,25 +317,19 @@ class Quiz extends StatelessWidget {
           ],
         ),
         SizedBox(height: 20),
-
-
         if (imageUrl.isNotEmpty)
           Image.asset(
             imageUrl,
             height: 220,
             fit: BoxFit.cover,
           ),
-        
         SizedBox(height: 20),
-
         Text(
           question,
           style: TextStyle(fontSize: 20),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 20),
-
-
         Wrap(
           alignment: WrapAlignment.center,
           spacing: 10,
@@ -344,7 +345,6 @@ class Quiz extends StatelessWidget {
               .toList(),
         ),
         SizedBox(height: 20),
-
         if (questionIndex > 0)
           ElevatedButton(
             onPressed: () => goBack(),
@@ -356,7 +356,6 @@ class Quiz extends StatelessWidget {
               textStyle: TextStyle(fontSize: 18),
             ),
           ),
-
         if (questionIndex == 0)
           ElevatedButton(
             onPressed: () => goToHome(),
