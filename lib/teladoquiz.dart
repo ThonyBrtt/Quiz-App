@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'telaresultado.dart'; // Certifique-se de que este arquivo está correto.
+import 'telaresultado.dart'; 
 
 class QuizPage extends StatefulWidget {
   @override
@@ -170,7 +170,7 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     super.initState();
-    _answeredScores = List<int?>.filled(_questions.length, null); // Inicializa a lista como null.
+    _answeredScores = List<int?>.filled(_questions.length, null);
     _startTimer();
   }
 
@@ -178,7 +178,7 @@ class _QuizPageState extends State<QuizPage> {
     setState(() {
       if (_answeredScores[_questionIndex] == null) {
         _score += score;
-        _answeredScores[_questionIndex] = score; // Salva a pontuação da questão atual.
+        _answeredScores[_questionIndex] = score; 
       }
       _questionIndex++;
       _timer = 10;
